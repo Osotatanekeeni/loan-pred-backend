@@ -50,6 +50,8 @@ def predict():
 	# Return prediction
 	return render_template('index.html', prediction=int(prediction.round()))
 
+@app.route('/accuracy', methods=[''])
+
 def formatInput(input):
 
 	input.pop("Loan_ID")
@@ -89,4 +91,5 @@ def formatInput(input):
 	
 
 if __name__ == "__main__":
-	app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
+	app.run()
+	# app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
