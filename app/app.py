@@ -9,18 +9,6 @@ import joblib
 app = Flask(__name__)
 lin_reg_model = pickle.load(open('./models/Linear_Regression_Model.pkl', 'rb'))
 
-# Loan ID
-# Gender
-# Marital Status
-# Number of dependents
-# Education status
-# Employment Status
-# Applicant Income
-# Co applicant Income
-# Loan Amount
-# Loan term
-# Credit history
-# Property Area
 @app.route('/')
 def index():
 	return render_template('index.html')
@@ -30,14 +18,13 @@ def index():
 def get():
 	with open('./data/test.csv', 'r') as f:
 		data = f.readlines()[1:5]
-		return render_template('index.html', data=data)
+		return jsonify(data)
 
 @app.route('/predict', methods=['POST'])
 def predict():
 
 	data = request.get_json()
-
-	# Format the data
+	
 	formatInput(data)
 	
 	print(data)
@@ -46,11 +33,28 @@ def predict():
 
 	# Predict
 	prediction = lin_reg_model.predict([data])
+	prediction = int(prediction.round())
+
+	if (prediction == 1):
+		prediction = "Yes"
+	else:
+		prediction = "No"
+
+	prediction = {'prediction': prediction}
 
 	# Return prediction
-	return render_template('index.html', prediction=int(prediction.round()))
+	return jsonify(prediction)
 
-@app.route('/accuracy', methods=[''])
+@app.route('/accuracy', methods=['GET'])
+def accuracy():
+	# read content from file
+	with open('./models/accuracy.txt', 'r') as f:
+		data = f.read().split(':')[1]
+		
+		data = int(float(data))
+		accuracy = {'Accuracy': data}
+		return jsonify(accuracy)
+
 
 def formatInput(input):
 
@@ -92,4 +96,3 @@ def formatInput(input):
 
 if __name__ == "__main__":
 	app.run()
-	# app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
