@@ -18,6 +18,8 @@ def index():
 def get():
 	with open('./data/test.csv', 'r') as f:
 		data = f.readlines()[1:5]
+		for d in data:
+			print(d)
 		return jsonify(data)
 
 @app.route('/predict', methods=['POST'])
@@ -40,7 +42,7 @@ def predict():
 	else:
 		prediction = "No"
 
-	prediction = {'prediction': prediction}
+	prediction = {'Prediction': prediction}
 
 	# Return prediction
 	return jsonify(prediction)
@@ -95,4 +97,5 @@ def formatInput(input):
 	
 
 if __name__ == "__main__":
-	app.run()
+	port = int(os.getenv('PORT'))
+	app.run(debug=True)
