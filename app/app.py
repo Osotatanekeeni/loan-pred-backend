@@ -97,5 +97,5 @@ def formatInput(input):
 	
 
 if __name__ == "__main__":
-	port = int(os.getenv('PORT'))
+	port = int(os.environ.get('PORT', 33507))
 	app.run(debug=True)
