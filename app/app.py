@@ -5,9 +5,11 @@ from flask import Flask, render_template, json, jsonify, request
 import os
 from flask import request
 import joblib
+import pandas as pd
+
 
 app = Flask(__name__)
-lin_reg_model = pickle.load(open('./models/Linear_Regression_Model.pkl', 'rb'))
+lin_reg_model = pickle.load(open('app\models\Linear_Regression_Model.pkl', 'rb'))
 
 @app.route('/')
 def index():
@@ -16,11 +18,9 @@ def index():
 # Get first four rows of test data
 @app.route('/data/test', methods=['GET'])
 def get():
-	with open('./data/test.csv', 'r') as f:
-		data = f.readlines()[1:5]
-		for d in data:
-			print(d)
-		return jsonify(data)
+	data = pd.read_csv('./data/test.csv')
+	print(data.head(4))
+	return(data.head(4).to_json(orient='records'))
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -97,5 +97,5 @@ def formatInput(input):
 	
 
 if __name__ == "__main__":
-	port = int(os.environ.get('PORT', 33507))
-	app.run(debug=True, port='port')
+	# port = int(os.environ.get('PORT', 33507))
+	app.run(debug=True)
