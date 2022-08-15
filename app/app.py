@@ -22,6 +22,7 @@ def get():
 	print(data.head(4))
 	return(data.head(4).to_json(orient='records'))
 
+
 @app.route('/predict', methods=['POST'])
 def predict():
 
