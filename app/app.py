@@ -1,6 +1,7 @@
 import pickle
 import flask
 from flask import Flask, render_template, json, jsonify, request
+import os
 
 import os
 from flask import request
@@ -9,11 +10,13 @@ import pandas as pd
 
 
 app = Flask(__name__)
-lin_reg_model = pickle.load(open('../app/models/Linear_Regression_Model.pkl', 'rb'))
+lin_reg_model = pickle.load(open('app\models\Linear_Regression_Model.pkl', 'rb'))
 
 @app.route('/')
 def index():
+	print(os.getcwd())
 	return render_template('index.html')
+	
 
 # Get first four rows of test data
 @app.route('/data/test', methods=['GET'])
